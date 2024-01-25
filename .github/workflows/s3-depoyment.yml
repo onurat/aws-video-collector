@@ -21,7 +21,7 @@ jobs:
         node-version: 16
     - name: Install dependencies and build
       run: |
-        cd client
+        cd public
         npm ci
         npm run build
     - name: Debug
