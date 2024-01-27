@@ -1,19 +1,20 @@
 const fs = require("fs");
 const { Pool } = require('pg');
 
-const Value = "postgres://mqkrztoq:Q6tnH2B1iVQpFmM2MGHhMoYewJ4zl_By@lallah.db.elephantsql.com/mqkrztoq"
+const connectionString = "postgres://mqkrztoq:voFrsE80nlniDMD22Q1dQO8z15EvWhVI@lallah.db.elephantsql.com/mqkrztoq";
 
 const pool = new Pool({
-  connectionString: Value,
+  connectionString: connectionString,
 });
 
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
+pool.connect()
+  .then(() => {
+    console.log('Database connection established');
+  })
+  .catch((err) => {
     console.error('Error connecting to the database:', err);
-  } else {
-    console.log('Database connection established:', res.rows[0].now);
-  }
-});
+  });
+
 module.exports = {
-    query: (text, params) => pool.query(text, params),
-  };
+  query: (text, params) => pool.query(text, params),
+};
