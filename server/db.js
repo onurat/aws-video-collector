@@ -6,6 +6,9 @@ const pool = new Pool({
   database: 'videocollectordb',
   password: 'vcollector1234',
   port: 5432,
+  ssl:{
+    rejectUnauthorized: false,
+  },
 });
 
 pool.connect()
