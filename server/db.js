@@ -1,10 +1,11 @@
-const fs = require("fs");
 const { Pool } = require('pg');
 
-const connectionString = "postgres://mqkrztoq:voFrsE80nlniDMD22Q1dQO8z15EvWhVI@lallah.db.elephantsql.com/mqkrztoq";
-
 const pool = new Pool({
-  connectionString: connectionString,
+  user: 'vcollector',
+  host: 'video-collector-db-instance.c9sasqeu213c.us-east-1.rds.amazonaws.com',
+  database: 'videocollectordb',
+  password: 'vcollector1234',
+  port: 5432,
 });
 
 pool.connect()
