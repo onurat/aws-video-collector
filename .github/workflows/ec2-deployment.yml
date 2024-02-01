@@ -1,4 +1,4 @@
-name: Deploy Backend to EC2
+name: Deploy Dockerized Backend to EC2
 
 on:
   push:
@@ -13,15 +13,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Set up Docker
+      uses: docker/setup-docker@v2
+
     - name: Configure SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Copy backend to EC2
+    - name: Copy Dockerized backend to EC2
       run: |
         scp -o StrictHostKeyChecking=no -r ./server/* ec2-user@54.83.92.115:/home/ec2-user/aws-video-collector/server/
 
-    - name: SSH into EC2 and restart server using pm2
+    - name: SSH into EC2 and restart Docker container
       run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@54.83.92.115 "source ~/.bashrc && cd ~/aws-video-collector/server && pm2 reload all"
+        ssh -o StrictHostKeyChecking=no ec2-user@54.83.92.115 "cd ~/aws-video-collector/server && docker-compose down && docker-compose up -d"
