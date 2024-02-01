@@ -13,7 +13,7 @@ function AddVideo({ handleAddVideo }) {
     }
 
     try {
-      const response = await fetch('http://54.83.92.115:5000', {
+      const response = await fetch('http://54.83.92.115:5000ws', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
