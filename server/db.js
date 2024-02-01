@@ -1,19 +1,24 @@
-const fs = require("fs");
 const { Pool } = require('pg');
 
-const Value = "postgres://mqkrztoq:Q6tnH2B1iVQpFmM2MGHhMoYewJ4zl_By@lallah.db.elephantsql.com/mqkrztoq"
-
 const pool = new Pool({
-  connectionString: Value,
+  user: 'vcollector',
+  host: 'video-collector-db-instance.c9sasqeu213c.us-east-1.rds.amazonaws.com',
+  database: 'videocollectordb',
+  password: 'vcollector1234',
+  port: 5432,
+  ssl:{
+    rejectUnauthorized: false,
+  },
 });
 
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
+pool.connect()
+  .then(() => {
+    console.log('Database connection established');
+  })
+  .catch((err) => {
     console.error('Error connecting to the database:', err);
-  } else {
-    console.log('Database connection established:', res.rows[0].now);
-  }
-});
+  });
+
 module.exports = {
-    query: (text, params) => pool.query(text, params),
-  };
+  query: (text, params) => pool.query(text, params),
+};
