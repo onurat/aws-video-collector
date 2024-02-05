@@ -10,9 +10,9 @@ app.use(express.json());
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
-app.get("/test", (req, res) => {
-  res.json({ message: "This is a test endpoint!" });
-});
+// app.get("/test", (req, res) => {
+//   res.json({ message: "This is a test endpoint!" });
+// });
 
 app.get("/", async (req, res) => {
   try {
