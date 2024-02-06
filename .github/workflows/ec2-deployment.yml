@@ -27,4 +27,4 @@ jobs:
 
     - name: SSH into EC2 and restart Docker container
       run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@54.83.92.115 "cd ~/aws-video-collector/server && docker-compose down && docker-compose up -d"
+        ssh -o StrictHostKeyChecking=no ec2-user@54.83.92.115 "cd ~/aws-video-collector/server && docker-compose pull && docker-compose up -d"
