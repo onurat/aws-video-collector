@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  backend:
+    image: "onuratas/aws-video-collector-backend:latest"
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+

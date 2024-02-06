@@ -1,7 +1,20 @@
-FROM node:14
-WORKDIR /app
+# Use the official Node.js image as the base image
+FROM node:16
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy both package.json and package-lock.json to the working directory
 COPY package*.json ./
-RUN npm install
+
+# Install application dependencies
+RUN npm install --only=prod --no-progress --loglevel=error
+
+# Copy the entire backend code to the working directory
 COPY . .
-EXPOSE 5000
-CMD ["node", "server.js"]
+
+# Expose the port on which your backend runs
+EXPOSE 5001
+
+# Command to run your application
+CMD ["npm", "start"]
