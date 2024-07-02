@@ -26,4 +26,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 << 'EOF'
           cd /home/ec2-user/aws-video-collector/server
-         
+          git pull origin main
+          sudo systemctl restart backend.service
+          EOF
