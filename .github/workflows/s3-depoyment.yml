@@ -13,6 +13,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+        - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+          - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -31,4 +42,4 @@ jobs:
           npm run build  # Ensure this script builds correctly
 
       - name: Sync build to S3
-        run: aws s3 sync ./build/ s3://aws-video-collector --exclude '*' --include 'index.html' --delete
+        run: aws s3 sync ./build/ s3://aws-video-collector --delete
