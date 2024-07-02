@@ -13,26 +13,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          node-version: '16'  # Adjusted to use Node.js version 16
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1  # Replace with your AWS region where your S3 bucket is located
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
 
       - name: Install AWS CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y awscli
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1 
       - name: Install dependencies and build
         run: |
           npm ci
           npm run build  # Ensure this script builds correctly
 
       - name: Sync build to S3
-        run: aws s3 sync ./build/ s3://aws-video-collector --delete
+        run: |
+          aws s3 sync ./build/ s3://aws-video-collector \
+            --exclude '*' \
+            --include 'index.html' \
+            --include 'manifest.json' \
+            --include 'asset-manifest.json' \
+            --delete
