@@ -21,11 +21,23 @@ jobs:
       - name: Copy backend to EC2
         run: |
           scp -o StrictHostKeyChecking=no -r ./server/* ec2-user@13.60.80.141:/home/ec2-user/aws-video-collector/server/
+          if [ $? -ne 0 ]; then
+            echo "Error: Failed to copy files to EC2 instance"
+            exit 1
+          fi
 
       - name: SSH into EC2 and deploy backend
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 << 'EOF'
-          cd /home/ec2-user/aws-video-collector/server
-          git pull origin main
-          sudo systemctl restart backend.service
+            cd /home/ec2-user/aws-video-collector/server
+            git pull origin main
+            if [ $? -ne 0 ]; then
+              echo "Error: Failed to pull latest code from Git"
+              exit 1
+            fi
+            sudo systemctl restart backend.service
+            if [ $? -ne 0 ]; then
+              echo "Error: Failed to restart backend service"
+              exit 1
+            fi
           EOF
