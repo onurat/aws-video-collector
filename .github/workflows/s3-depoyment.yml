@@ -36,7 +36,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: List build directory contents  # Debugging step added
+      - name: List build directory contents 
         run: ls -al ./build/
 
       - name: Sync build to S3
