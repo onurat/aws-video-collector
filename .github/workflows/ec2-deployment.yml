@@ -1,4 +1,4 @@
-name: Deploy Dockerized Backend to EC2
+name: backend-ec2-deploy
 
 on:
   push:
@@ -10,21 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v1
+      - name: Configure SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Configure SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Copy backend to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./server/* ec2-user@13.60.80.141:/home/ec2-user/aws-video-collector/server/
 
-    - name: Copy Dockerized backend to EC2
-      run: |
-        scp -o StrictHostKeyChecking=no -r ./server/* ec2-user@54.83.92.115:/home/ec2-user/aws-video-collector/server/
-
-    - name: SSH into EC2 and restart Docker container
-      run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@54.83.92.115 "cd ~/aws-video-collector/server && docker-compose pull && docker-compose up -d"
+      - name: SSH into EC2 and deploy backend
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 << 'EOF'
+          cd /home/ec2-user/aws-video-collector/server
+         
