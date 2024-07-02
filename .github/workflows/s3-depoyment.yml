@@ -27,9 +27,8 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          cd src  # Move into the src directory
           npm ci
           npm run build  # Ensure this script builds correctly
 
       - name: Sync files to S3
-        run: aws s3 sync src/build/ s3://aws-video-collector 
+        run: aws s3 sync build/src/ s3://aws-video-collector  # Adjust path as needed
