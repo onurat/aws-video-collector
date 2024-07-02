@@ -27,8 +27,8 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          npm ci  # Install dependencies
-          npm run build  # Build the React application
+          npm ci
+          npm run build  # Ensure this script builds correctly
 
-      - name: Sync files to S3
-        run: aws s3 sync ./build/ s3://aws-video-collector --delete
+      - name: Sync build to S3
+        run: aws s3 sync ./build/ s3://aws-video-collector --exclude '*' --include 'index.html' --delete
