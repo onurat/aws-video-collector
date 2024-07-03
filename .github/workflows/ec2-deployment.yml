@@ -1,4 +1,4 @@
-name: backend-deploy
+name: Backend EC2 Deploy
 
 on:
   push:
@@ -10,38 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configure SSH
+      - name: Install SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Create remote directory for backend
+      - name: Deploy to EC2 instance
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 "mkdir -p /home/ec2-user/aws-video-collector/server"
-
-      - name: Copy backend to EC2
-        run: |
-          scp -o StrictHostKeyChecking=no -r ./server/* ec2-user@13.60.80.141:/home/ec2-user/aws-video-collector/server/
-          if [ $? -ne 0 ]; then
-            echo "Error: Failed to copy backend files to EC2 instance"
-            exit 1
-          fi
-
-      - name: SSH into EC2 and deploy backend
-        run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 << 'EOF'
-            cd /home/ec2-user/aws-video-collector/server
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} '
+            set -e
+            cd /path/to/your/backend
             git pull origin main
-            if [ $? -ne 0 ]; then
-              echo "Error: Failed to pull latest backend code from Git"
-              exit 1
-            fi
-            sudo systemctl restart backend.service
-            if [ $? -ne 0 ]; then
-              echo "Error: Failed to restart backend service"
-              exit 1
-            fi
-          EOF
+          '
