@@ -1,4 +1,4 @@
-name: backend-ec2-deploy
+name: backend-deploy
 
 on:
   push:
@@ -18,15 +18,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create remote directory
+      - name: Create remote directory for backend
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 "mkdir -p /home/ec2-user/aws-video-collector/server/"
+          ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 "mkdir -p /home/ec2-user/aws-video-collector/server"
 
       - name: Copy backend to EC2
         run: |
           scp -o StrictHostKeyChecking=no -r ./server/* ec2-user@13.60.80.141:/home/ec2-user/aws-video-collector/server/
           if [ $? -ne 0 ]; then
-            echo "Error: Failed to copy files to EC2 instance"
+            echo "Error: Failed to copy backend files to EC2 instance"
             exit 1
           fi
 
@@ -36,7 +36,7 @@ jobs:
             cd /home/ec2-user/aws-video-collector/server
             git pull origin main
             if [ $? -ne 0 ]; then
-              echo "Error: Failed to pull latest code from Git"
+              echo "Error: Failed to pull latest backend code from Git"
               exit 1
             fi
             sudo systemctl restart backend.service
