@@ -18,6 +18,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Ensure target directory exists on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@13.60.80.141 "mkdir -p /home/ec2-user/aws-video-collector/server/"
+
       - name: Copy backend to EC2
         run: |
           scp -o StrictHostKeyChecking=no -r ./server/* ec2-user@13.60.80.141:/home/ec2-user/aws-video-collector/server/
