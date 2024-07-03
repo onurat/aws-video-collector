@@ -22,6 +22,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} '
             set -e
-            cd /Documents/GitHub/aws-video-collector/server
+            cd /home/ec2-user/server
             git pull origin main
           '
