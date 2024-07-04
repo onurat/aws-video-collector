@@ -18,10 +18,21 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
+      - name: Build Docker image
+        run: |
+          docker build -t aws-video-collector .
+        
+      - name: Push Docker image to DockerHub
+        run: |
+          docker tag aws-video-collector ${{ secrets.DOCKER_USERNAME }}/aws-video-collector
+          docker push ${{ secrets.DOCKER_USERNAME }}/aws-video-collector
+        
       - name: Deploy to EC2 instance
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} '
             set -e
-            cd /home/ec2-user/server
-            git pull origin main
+            docker pull ${{ secrets.DOCKER_USERNAME }}/aws-video-collector
+            docker stop aws-video-collector || true
+            docker rm aws-video-collector || true
+            docker run -d -p 5001:5001 --name aws-video-collector ${{ secrets.DOCKER_USERNAME }}/aws-video-collector
           '
