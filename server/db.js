@@ -1,11 +1,7 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'mqkrztoq',
-  host: 'lallah.db.elephantsql.com',
-  database: 'mqkrztoq',
-  password: 'your_password',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
   },
