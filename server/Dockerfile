@@ -9,6 +9,6 @@ RUN npm install --only=prod --no-progress --loglevel=error
 
 COPY . .
 
-EXPOSE 3000 
+EXPOSE 5001
 
 CMD ["npm", "start"]
