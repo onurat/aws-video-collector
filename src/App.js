@@ -6,7 +6,7 @@ import VideoTable from "./Components/videotable/VideoTable"
 import Navbar from './Components/Navbar/Navbar';
 import Footer from './Components/Footer/Footer';
 
-const API_BASE_URL = 'http://54.83.92.115:5000';
+const API_BASE_URL = 'http://localhost:5001';
 
 function App() {
   const [videos, setVideos] = useState([]);
@@ -37,7 +37,6 @@ function App() {
   const handleRemove = async (videoId) => {
     try {
       const response = await axios.delete(`${API_BASE_URL}/${videoId}`);
-      console.log('Delete Response:', response); 
       if (response.status === 200) {
         setVideos((prevVideos) => prevVideos.filter((video) => video.id !== videoId));
       } else {

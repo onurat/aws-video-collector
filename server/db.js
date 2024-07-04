@@ -1,12 +1,12 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'vcollector',
-  host: 'video-collector-db-instance.c9sasqeu213c.us-east-1.rds.amazonaws.com',
-  database: 'videocollectordb',
-  password: 'vcollector1234',
+  user: 'mqkrztoq',
+  host: 'lallah.db.elephantsql.com',
+  database: 'mqkrztoq',
+  password: 'your_password',
   port: 5432,
-  ssl:{
+  ssl: {
     rejectUnauthorized: false,
   },
 });

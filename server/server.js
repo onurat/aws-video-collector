@@ -5,7 +5,6 @@ const db = require("./db");
 
 const cors = require("cors");
 app.use(cors());
-
 app.use(express.json());
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
@@ -18,13 +17,13 @@ app.get("/", async (req, res) => {
   try {
     const query = "SELECT * FROM videos";
     const { rows } = await db.query(query);
-    console.log("Fetched videos:", rows);
     res.json(rows);
   } catch (error) {
     console.error("Error fetching videos:", error);
     res.status(500).json({ result: "failure", message: "Failed to fetch videos" });
   }
 });
+
 app.post("/", async (req, res) => {
   const { title, url } = req.body;
 
@@ -41,7 +40,6 @@ app.post("/", async (req, res) => {
 
     const result = await db.query(queryText, values);
 
-    console.log("Inserted video:", result.rows[0]);
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Error creating video:', error);
